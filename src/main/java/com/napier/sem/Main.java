@@ -1,17 +1,22 @@
 package com.napier.sem;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoDatabase;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        // Connect to the local MongoDB Docker container instance
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            System.out.println("Connecting to database...");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+            // Get database (creates it if it doesn't exist)
+            MongoDatabase database = mongoClient.getDatabase("test_db");
+
+            System.out.println("Successfully linked to MongoDB container!");
+        } catch (Exception e) {
+            System.out.println("Failed to connect to MongoDB container.");
+            e.printStackTrace();
         }
     }
 }
