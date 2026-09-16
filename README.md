@@ -18,6 +18,8 @@
 
 ![Fatalities](https://img.shields.io/badge/Fatalities-ON-8B0000?style=flat-square)
 
+# DevOps
+![Build Status](https://img.shields.io/github/actions/workflow/status/YuenL66/devops/main.yml?branch=develop&style=flat-square)
 
 
 #Hello I'm Yuen
