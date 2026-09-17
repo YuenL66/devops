@@ -18,6 +18,10 @@
 
 ![Fatalities](https://img.shields.io/badge/Fatalities-ON-8B0000?style=flat-square)
 
+# DevOps
+**Develop Build Status:**![Build Status](https://img.shields.io/github/actions/workflow/status/YuenL66/devops/main.yml?branch=develop&style=flat-square)
+
+**Master Build Status:**![Master Build Status](https://img.shields.io/github/actions/workflow/status/YuenL66/devops/main.yml?branch=master&style=flat-square)
 
 
 #Hello I'm Yuen

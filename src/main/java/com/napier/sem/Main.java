@@ -1,17 +1,32 @@
 package com.napier.sem;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
+import org.bson.Document;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        // Connect to MongoDB on local system using port 27000
+        MongoClient mongoClient = new MongoClient("mongo-db-server", 27017);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        // Get database - creates it if it doesn't exist
+        MongoDatabase database = mongoClient.getDatabase("mydb");
+
+        // Get collection
+        MongoCollection<Document> collection = database.getCollection("test");
+
+        // Create document
+        Document doc = new Document("name", "Your Name")
+                .append("class", "DevOps")
+                .append("year", "2024")
+                .append("result", new Document("CW", 95).append("EX", 85));
+
+        // Insert document into collection
+        collection.insertOne(doc);
+
+        // Retrieve and print document
+        Document myDoc = collection.find().first();
+        System.out.println(myDoc.toJson());
     }
 }
