@@ -29,5 +29,8 @@ jobs:
       - name: Run App Container
         run: docker run --name semethic-app --network sem-net -d semethic
 
+      - name: Wait for App Execution
+        run: sleep 10
+
       - name: View Logs
         run: docker logs semethic-app
