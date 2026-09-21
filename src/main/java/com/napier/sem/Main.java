@@ -1,32 +1,62 @@
 package com.napier.sem;
 
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoCollection;
-import org.bson.Document;
+import java.sql.*;
 
-public class Main {
-    public static void main(String[] args) {
-        // Connect to MongoDB on local system using port 27000
-        MongoClient mongoClient = new MongoClient("mongo-db-server", 27017);
+public class Main
+{
+    public static void main(String[] args)
+    {
+        try
+        {
+            // Load Database driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        }
+        catch (ClassNotFoundException e)
+        {
+            System.out.println("Could not load SQL driver");
+            System.exit(-1);
+        }
 
-        // Get database - creates it if it doesn't exist
-        MongoDatabase database = mongoClient.getDatabase("mydb");
+        // Connection to the database
+        Connection con = null;
+        int retries = 100;
+        for (int i = 0; i < retries; ++i)
+        {
+            System.out.println("Connecting to database...");
+            try
+            {
+                // Wait a bit for db to start (reduced to 5 seconds so you don't wait forever per retry)
+                Thread.sleep(5000);
+                // Connect to database
+                con = DriverManager.getConnection("jdbc:mysql://db:3306/employees?allowPublicKeyRetrieval=true&useSSL=false", "root", "example");
+                System.out.println("Successfully connected");
+                // Wait a bit
+                Thread.sleep(10000);
+                // Exit for loop
+                break;
+            }
+            catch (SQLException sqle)
+            {
+                System.out.println("Failed to connect to database attempt " + Integer.toString(i));
+                System.out.println(sqle.getMessage());
+            }
+            catch (InterruptedException ie)
+            {
+                System.out.println("Thread interrupted? Should not happen.");
+            }
+        }
 
-        // Get collection
-        MongoCollection<Document> collection = database.getCollection("test");
-
-        // Create document
-        Document doc = new Document("name", "Your Name")
-                .append("class", "DevOps")
-                .append("year", "2024")
-                .append("result", new Document("CW", 95).append("EX", 85));
-
-        // Insert document into collection
-        collection.insertOne(doc);
-
-        // Retrieve and print document
-        Document myDoc = collection.find().first();
-        System.out.println(myDoc.toJson());
+        if (con != null)
+        {
+            try
+            {
+                // Close connection
+                con.close();
+            }
+            catch (Exception e)
+            {
+                System.out.println("Error closing connection to database");
+            }
+        }
     }
 }
