@@ -86,6 +86,9 @@ public class Main
         // Display results
         a.displayEmployee(emp);
 
+        // Get salaries by role
+        //a.getSalariesByRole("Engineer");
+
         // Disconnect from database
         a.disconnect();
     }
@@ -142,6 +145,42 @@ public class Main
             System.out.println(e.getMessage());
             System.out.println("Failed to get employee details");
             return null;
+        }
+    }
+
+    /**
+     * Get salaries by role from the database.
+     * @param title Role title
+     */
+    public void getSalariesByRole(String title)
+    {
+        try
+        {
+            Statement stmt = con.createStatement();
+            String strSelect =
+                    "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary "
+                            + "FROM employees, salaries, titles "
+                            + "WHERE employees.emp_no = salaries.emp_no "
+                            + "AND employees.emp_no = titles.emp_no "
+                            + "AND salaries.to_date = '9999-01-01' "
+                            + "AND titles.to_date = '9999-01-01' "
+                            + "AND titles.title = '" + title + "' "
+                            + "ORDER BY employees.emp_no ASC";
+            ResultSet rset = stmt.executeQuery(strSelect);
+            while (rset.next())
+            {
+                Employee emp = new Employee();
+                emp.emp_no = rset.getInt("emp_no");
+                emp.first_name = rset.getString("first_name");
+                emp.last_name = rset.getString("last_name");
+                emp.salary = rset.getInt("salary");
+                System.out.println(emp.emp_no + " " + emp.first_name + " " + emp.last_name + " " + emp.salary);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get salary details by role");
         }
     }
 
