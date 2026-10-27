@@ -98,7 +98,7 @@ public class Main
                 Employee emp = new Employee();
                 emp.emp_no = rset.getInt("employees.emp_no");
                 emp.first_name = rset.getString("employees.first_name");
-                emp.last_name = rset.getString("employees.last_name");
+                emp.last_name = rset.getString("last_name");
                 emp.salary = rset.getInt("salaries.salary");
                 employees.add(emp);
             }
@@ -158,8 +158,16 @@ public class Main
                 emp.last_name = rset.getString("last_name");
                 emp.title = rset.getString("title");
                 emp.salary = rset.getInt("salary");
-                emp.dept_name = rset.getString("dept_name");
-                emp.manager = rset.getString("mgr_first") + " " + rset.getString("mgr_last");
+
+                Department dept = new Department();
+                dept.dept_name = rset.getString("dept_name");
+                emp.dept = dept;
+
+                Employee mgr = new Employee();
+                mgr.first_name = rset.getString("mgr_first");
+                mgr.last_name = rset.getString("mgr_last");
+                emp.manager = mgr;
+
                 return emp;
             }
             else
